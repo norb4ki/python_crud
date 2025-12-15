@@ -36,3 +36,13 @@ class TaskManager:
     
     return self._tasks[id]
 
+  def _task_to_dict(self, task: Task):
+    return {
+      "id": task.id,
+      "title": task.title,
+      "status": task.status
+    }
+  
+  def to_dict(self):
+    return [self._task_to_dict(task) for task in self._tasks.values()]
+  
