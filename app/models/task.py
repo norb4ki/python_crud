@@ -1,8 +1,8 @@
 class Task:
-  def __init__(self, id, title):
+  def __init__(self, id: int, title:str):
     self.id = id
     self.title = title
-    self.completed = False
+    self.completed: bool = False
 
   @property
   def status(self):
@@ -11,5 +11,3 @@ class Task:
   def __repr__(self):
     return f"Task (id={self.id}, title={self.title}, status={self.status})"
   
-task = Task(0, '2323')
-print(task)
