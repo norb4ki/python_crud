@@ -13,13 +13,26 @@ class TaskManager:
 
   def complete_task(self, id: int):
     if id not in self._tasks: 
-      raise KeyError("Task with such id wasn't found")
-    else:
-      task = self._tasks[id]
-      task.completed = True
+      raise KeyError(f"Task with id {id} wasn't found")
+
+    task = self._tasks[id]
+    task.completed = True
 
   def get_tasks(self):
     return list(self._tasks.values())
   
   def pending_tasks(self):
     return (task for task in self._tasks.values() if not task.completed)
+
+  def remove_task(self, id: int):
+    if id not in self._tasks:
+      raise KeyError(f"Task with id {id} wasn't found")
+    
+    return self._tasks.pop(id)
+
+  def get_task(self, id):
+    if id not in self._tasks:
+      raise KeyError(f"Task with id {id} wasn't found")
+    
+    return self._tasks[id]
+
