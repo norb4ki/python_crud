@@ -3,11 +3,12 @@ from app.models.task import Task
 class TaskManager:
   def __init__(self):
     self._tasks: dict[int, Task] = {}
+    self._next_id = 1
 
   def add_task(self, title: str):
-    id = len(self._tasks) + 1
-    task = Task(id, title)
-    self._tasks[id] = task
+    task = Task(self._next_id, title)
+    self._tasks[self._next_id] = task
+    self._next_id += 1
     return task
 
   def complete_task(self, id: int):
