@@ -1,21 +1,25 @@
-from app.services.task_manager import TaskManager
+from fastapi import FastAPI
+from app.routes.task import router as task_router
 
-tm = TaskManager()
-tm.add_task("Begit")
-tm.add_task("Press kachat")
+app = FastAPI()
+app.include_router(task_router)
 
-for task in tm.pending_tasks():
-    print(task)
+# tm = TaskManager()
+# tm.add_task("Begit")
+# tm.add_task("Press kachat")
 
-tm.add_task("Otjumana")
-tm.add_task("prisedana")
+# for task in tm.pending_tasks():
+#     print(task)
+
+# tm.add_task("Otjumana")
+# tm.add_task("prisedana")
 
 
-for task in tm.pending_tasks():
-    print(task)
+# for task in tm.pending_tasks():
+#     print(task)
 
-tm.remove_task(1)
-tm.complete_task(3)
+# tm.remove_task(1)
+# tm.complete_task(3)
 
-for task in tm.pending_tasks():
-    print(task)
+# for task in tm.pending_tasks():
+#     print(task)
