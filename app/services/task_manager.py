@@ -1,40 +1,34 @@
 from app.models.task import Task
+from app.repositories.task_repository import TaskRepository
 
-class TaskManager:
+
+class TaskService:
   def __init__(self):
-    self._tasks: dict[int, Task] = {}
-    self._next_id = 1
+    self.repository = TaskRepository()
 
   def add_task(self, title: str):
-    task = Task(self._next_id, title)
-    self._tasks[self._next_id] = task
-    self._next_id += 1
-    return task
+    return self.repository.create(title)
 
   def complete_task(self, id: int):
-    if id not in self._tasks: 
+    if not self.repository.is_task_exists(id): 
       raise KeyError(f"Task with id {id} wasn't found")
-
-    task = self._tasks[id]
-    task.completed = True
+    return self.repository.complete(id)
+  
 
   def get_tasks(self):
-    return list(self._tasks.values())
-  
-  def pending_tasks(self):
-    return (task for task in self._tasks.values() if not task.completed)
+    return list(self.repository.get_all())
 
   def remove_task(self, id: int):
-    if id not in self._tasks:
+    if not self.repository.is_task_exists(id):
       raise KeyError(f"Task with id {id} wasn't found")
     
-    return self._tasks.pop(id)
+    return self.repository.delete(id)
 
   def get_task(self, id):
-    if id not in self._tasks:
+    if not self.repository.is_task_exists(id):
       raise KeyError(f"Task with id {id} wasn't found")
     
-    return self._tasks[id]
+    return self.repository.get_by_id(id)
 
   def _task_to_dict(self, task: Task):
     return {
@@ -44,5 +38,5 @@ class TaskManager:
     }
   
   def to_dict(self):
-    return [self._task_to_dict(task) for task in self._tasks.values()]
+    return [self._task_to_dict(task) for task in self.get_tasks()]
   
