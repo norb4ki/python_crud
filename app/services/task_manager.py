@@ -3,8 +3,8 @@ from app.repositories.task_repository import TaskRepository
 
 
 class TaskService:
-  def __init__(self):
-    self.repository = TaskRepository()
+  def __init__(self, repository: TaskRepository):
+    self.repository = repository
 
   def add_task(self, title: str):
     return self.repository.create(title)
@@ -13,7 +13,6 @@ class TaskService:
     if not self.repository.is_task_exists(id): 
       raise KeyError(f"Task with id {id} wasn't found")
     return self.repository.complete(id)
-  
 
   def get_tasks(self):
     return list(self.repository.get_all())
