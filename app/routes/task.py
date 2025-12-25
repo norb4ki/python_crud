@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
+from app.repositories.task_repository import TaskRepository
 from app.services.task_manager import TaskService
 from app.schemas.task import *
 
@@ -7,7 +8,7 @@ router = APIRouter(
   prefix='/tasks',
   tags=["tasks"]
   )
-tm = TaskService()
+tm = TaskService(repository=TaskRepository())
 
 @router.get('/', response_model=list[TaskRead])
 async def get_tasks():
