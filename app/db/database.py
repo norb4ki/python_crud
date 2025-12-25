@@ -7,14 +7,14 @@ load_dotenv()
 
 async def run():
   try:
-    con = await asyncpg.connect(
+    con = await asyncpg.create_pool(
       user=os.getenv('DB_TASKS_USER'), 
       database=os.getenv('DB_TASKS_NAME'), 
       password=os.getenv('DB_TASKS_PASSWORD'),
       host='localhost',
       port=5432
       )
-
+    
     print("Connected to db")
     value = await con.fetchval("SELECT 1;")
     print ("Query result: ", value)
