@@ -7,6 +7,15 @@ class TaskService:
     self.repository = repository
 
   async def add_task(self, title: str):
+    """
+    Add the task with provided title. 
+
+    Args:
+      title (string): Task title.
+    
+    Returns:
+      task: The  Task object
+    """
     task = await self.repository.create(title)
     return task
 
@@ -18,7 +27,7 @@ class TaskService:
       id (int): Unique task ID.
 
     Returns:
-      Task: The task object.
+      task: The Task object.
 
     Raises:
       TaskNotFoundError: If the task does not exist.
