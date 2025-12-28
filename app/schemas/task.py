@@ -6,7 +6,7 @@ class TaskModel(BaseModel):
 class TaskRead(BaseModel):
   id: int
   title: str
-  status: str
+  status: bool
 
 class BaseErrorResponse(BaseModel):
   err: str

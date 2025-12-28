@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Request
 from app.schemas.task import *
 from app.utils.exceptions import *
-from app.services.task_manager import TaskService
+from app.services.task_manager import TaskManager
 
 router = APIRouter(
   prefix='/tasks',
@@ -10,13 +10,13 @@ router = APIRouter(
 
 @router.get('/', response_model=list[TaskRead])
 async def get_tasks(req: Request, ):
-  tm: TaskService = req.app.state.tm
+  tm: TaskManager = req.app.state.tm
   tasks = await tm.to_dict()
   return tasks
 
 @router.post('/', response_model=TaskRead)
 async def post_task(req: Request, task: TaskModel):
-  tm: TaskService = req.app.state.tm
+  tm: TaskManager = req.app.state.tm
 
   added_task = await tm.add_task(task.title)
   return tm._task_to_dict(added_task)
@@ -29,7 +29,7 @@ async def post_task(req: Request, task: TaskModel):
     }   
     )
 async def get_task_by_id(req: Request, id: int):
-  tm: TaskService = req.app.state.tm
+  tm: TaskManager = req.app.state.tm
 
   try:
     task = await tm.get_task(id)
@@ -48,7 +48,7 @@ async def get_task_by_id(req: Request, id: int):
     }  
     )
 async def delete_task_by_id(req: Request, id: int):
-  tm: TaskService = req.app.state.tm
+  tm: TaskManager = req.app.state.tm
 
   try:
     await tm.remove_task(id)
@@ -67,7 +67,7 @@ async def delete_task_by_id(req: Request, id: int):
     }   
     )
 async def complete_task_by_id(req: Request, id: int):
-  tm: TaskService = req.app.state.tm
+  tm: TaskManager = req.app.state.tm
 
   try:
     task = await tm.complete_task(id)

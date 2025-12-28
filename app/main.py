@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from app.routes.task import router as task_router
 from dotenv import load_dotenv
 from app.repositories.task_repository import TaskRepository
-from app.services.task_manager import TaskService
+from app.services.task_manager import TaskManager
 import asyncpg
 import os
 
@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
         port=5432
         )
     repo = TaskRepository(app.state.db_pool)
-    app.state.tm = TaskService(repo)
+    app.state.tm = TaskManager(repo)
   except Exception as e:
     print("Connection failed:")
     print(e)

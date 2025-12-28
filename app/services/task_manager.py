@@ -2,7 +2,7 @@ from app.models.task import Task
 from app.repositories.task_repository import TaskRepository
 from app.utils.exceptions import *
 
-class TaskService:
+class TaskManager:
   def __init__(self, repository: TaskRepository):
     self.repository = repository
 
@@ -87,7 +87,7 @@ class TaskService:
     return {
       "id": task.id,
       "title": task.title,
-      "status": task.status
+      "status": task.completed
     }
   
   async def to_dict(self):
