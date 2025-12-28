@@ -30,11 +30,12 @@ class TaskRepository:
     return self._tasks.pop(id)
 
 
-  async def complete(self, id: int) -> Task:
-    task = self._tasks[id]
-    task.completed = True
-
-    return task
+  async def complete(self, id: int) -> Task | None:
+    task_record = await self._pool.fetchrow(COMPLETE_TASK, id)
+    if task_record is None:
+      return None
+    
+    return self._record_to_task(task_record)
   
   def is_task_exists(self, id: int) -> bool:
     return id in self._tasks

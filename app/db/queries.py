@@ -6,7 +6,7 @@ VALUES ($1)
 RETURNING id, title, completed;
 """
 COMPLETE_TASK = """
-UPDATE tasks SET is_completed = true WHERE id = $1
+UPDATE tasks SET completed = true WHERE id = $1
 RETURNING id, title, completed;
 """
 DELETE_TASK = """DELETE FROM tasks WHERE id = $1

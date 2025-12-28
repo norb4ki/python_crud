@@ -11,9 +11,23 @@ class TaskService:
     return task
 
   async def complete_task(self, id: int):
-    if not self.repository.is_task_exists(id): 
-      raise KeyError(f"Task with id {id} wasn't found")
-    return self.repository.complete(id)
+    """
+    Mark a task as completed by its unique identifier.
+
+    Args:
+        id (int): Unique task ID.
+
+    Returns:
+        Task: The task object.
+
+    Raises:
+        TaskNotFoundError: If the task does not exist.
+    """
+    task = await self.repository.complete(id)
+
+    if task is None:
+      raise TaskNotFoundError(id)
+    return task
 
   async def get_tasks(self):
     """
@@ -26,6 +40,7 @@ class TaskService:
     return list(tasks)
 
   async def remove_task(self, id: int):
+    
     if not self.repository.is_task_exists(id):
       raise KeyError(f"Task with id {id} wasn't found")
     

@@ -10,14 +10,12 @@ router = APIRouter(
 
 @router.get('/', response_model=list[TaskRead])
 async def get_tasks(req: Request, ):
-  # Retrieving Task Manager from app state
   tm: TaskService = req.app.state.tm
   tasks = await tm.to_dict()
   return tasks
 
 @router.post('/', response_model=TaskRead)
 async def post_task(req: Request, task: TaskModel):
-    # Retrieving Task Manager from app state
   tm: TaskService = req.app.state.tm
 
   added_task = await tm.add_task(task.title)
@@ -31,7 +29,6 @@ async def post_task(req: Request, task: TaskModel):
     }   
     )
 async def get_task_by_id(req: Request, id: int):
-  # Retrieving Task Manager from app state
   tm: TaskService = req.app.state.tm
 
   try:
@@ -51,7 +48,6 @@ async def get_task_by_id(req: Request, id: int):
     }  
     )
 async def delete_task_by_id(req: Request, id: int):
-  # Retrieving Task Manager from app state
   tm = req.app.state.tm
 
   try:
@@ -71,14 +67,12 @@ async def delete_task_by_id(req: Request, id: int):
     }   
     )
 async def complete_task_by_id(req: Request, id: int):
-  # Retrieving Task Manager from app state
-  tm = req.app.state.tm
+  tm: TaskService = req.app.state.tm
 
   try:
-    tm.complete_task(id)
-    task = tm.get_task(id)
+    task = await tm.complete_task(id)
     return tm._task_to_dict(task)
-  except KeyError:
+  except TaskNotFoundError:
     raise HTTPException(
       status_code = 404,
       detail = f"Task with id={id} not found"
