@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Request
 from app.schemas.task import *
 from app.utils.exceptions import *
+from app.services.task_manager import TaskService
 
 router = APIRouter(
   prefix='/tasks',
@@ -10,16 +11,16 @@ router = APIRouter(
 @router.get('/', response_model=list[TaskRead])
 async def get_tasks(req: Request, ):
   # Retrieving Task Manager from app state
-  tm = req.app.state.tm
+  tm: TaskService = req.app.state.tm
   tasks = await tm.to_dict()
   return tasks
 
 @router.post('/', response_model=TaskRead)
 async def post_task(req: Request, task: TaskModel):
     # Retrieving Task Manager from app state
-  tm = req.app.state.tm
+  tm: TaskService = req.app.state.tm
 
-  added_task = tm.add_task(task.title)
+  added_task = await tm.add_task(task.title)
   return tm._task_to_dict(added_task)
 
 @router.get(
@@ -31,7 +32,7 @@ async def post_task(req: Request, task: TaskModel):
     )
 async def get_task_by_id(req: Request, id: int):
   # Retrieving Task Manager from app state
-  tm = req.app.state.tm
+  tm: TaskService = req.app.state.tm
 
   try:
     task = await tm.get_task(id)

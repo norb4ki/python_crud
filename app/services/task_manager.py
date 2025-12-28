@@ -7,7 +7,8 @@ class TaskService:
     self.repository = repository
 
   async def add_task(self, title: str):
-    return self.repository.create(title)
+    task = await self.repository.create(title)
+    return task
 
   async def complete_task(self, id: int):
     if not self.repository.is_task_exists(id): 

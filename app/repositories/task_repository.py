@@ -22,11 +22,9 @@ class TaskRepository:
     return self._record_to_task(task_record)
 
   async def create(self, title: str) -> Task:
-    task = Task(self._next_id, title)
-    self._tasks[self._next_id] = task
-    self._next_id += 1
+    task_record = await self._pool.fetchrow(POST_TASK, title)
 
-    return task
+    return self._record_to_task(task_record)
 
   async def delete(self, id: int) -> Task:
     return self._tasks.pop(id)
