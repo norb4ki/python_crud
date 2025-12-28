@@ -39,7 +39,7 @@ class TaskRepository:
     """
     record = await self._pool.fetchrow(DELETE_TASK, id)
 
-    return record["id"] == id
+    return record is not None
 
 
   async def complete(self, id: int) -> Task | None:
