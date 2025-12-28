@@ -13,21 +13,26 @@ class TaskRepository:
     task_records = await self._pool.fetch(GET_TASKS)
     return self._rec_list_to_task_list(task_records)
 
-  def get_by_id(self, id:int) -> Task:
-    return self._tasks[id]
+  async def get_by_id(self, id:int) -> Task | None:
+    task_record = await self._pool.fetchrow(GET_TASK_BY_ID, id)
+    
+    if task_record is None:
+      return None
+    
+    return self._record_to_task(task_record)
 
-  def create(self, title: str) -> Task:
+  async def create(self, title: str) -> Task:
     task = Task(self._next_id, title)
     self._tasks[self._next_id] = task
     self._next_id += 1
 
     return task
 
-  def delete(self, id: int) -> Task:
+  async def delete(self, id: int) -> Task:
     return self._tasks.pop(id)
 
 
-  def complete(self, id: int) -> Task:
+  async def complete(self, id: int) -> Task:
     task = self._tasks[id]
     task.completed = True
 

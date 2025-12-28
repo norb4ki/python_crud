@@ -1,34 +1,55 @@
 from app.models.task import Task
 from app.repositories.task_repository import TaskRepository
-
+from app.utils.exceptions import *
 
 class TaskService:
   def __init__(self, repository: TaskRepository):
     self.repository = repository
 
-  def add_task(self, title: str):
+  async def add_task(self, title: str):
     return self.repository.create(title)
 
-  def complete_task(self, id: int):
+  async def complete_task(self, id: int):
     if not self.repository.is_task_exists(id): 
       raise KeyError(f"Task with id {id} wasn't found")
     return self.repository.complete(id)
 
   async def get_tasks(self):
+    """
+    Retrieve a list of tasks.
+
+    Returns:
+        list[Task]: The list of task objects
+    """
     tasks = await self.repository.get_all()
     return list(tasks)
 
-  def remove_task(self, id: int):
+  async def remove_task(self, id: int):
     if not self.repository.is_task_exists(id):
       raise KeyError(f"Task with id {id} wasn't found")
     
     return self.repository.delete(id)
 
-  def get_task(self, id):
-    if not self.repository.is_task_exists(id):
-      raise KeyError(f"Task with id {id} wasn't found")
+  async def get_task(self, id: int) -> Task:
+    """
+    Retrieve a task by its unique identifier.
+
+    Args:
+        id (int): Unique task ID.
+
+    Returns:
+        Task: The task object.
+
+    Raises:
+        TaskNotFoundError: If the task does not exist.
+    """
+
+    task = await self.repository.get_by_id(id)
     
-    return self.repository.get_by_id(id)
+    if task is None:
+      raise TaskNotFoundError(id)
+
+    return task
 
   def _task_to_dict(self, task: Task):
     return {

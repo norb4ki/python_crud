@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
-from app.repositories.task_repository import TaskRepository
-from app.services.task_manager import TaskService
 from app.schemas.task import *
+from app.utils.exceptions import *
 
 router = APIRouter(
   prefix='/tasks',
@@ -35,9 +34,9 @@ async def get_task_by_id(req: Request, id: int):
   tm = req.app.state.tm
 
   try:
-    task = tm.get_task(id)
+    task = await tm.get_task(id)
     return tm._task_to_dict(task)
-  except KeyError:
+  except TaskNotFoundError:
     raise HTTPException(
       status_code = 404,
       detail = f"Task with id={id} not found"
