@@ -12,8 +12,8 @@ router = APIRouter(
 async def get_tasks(req: Request, ):
   # Retrieving Task Manager from app state
   tm = req.app.state.tm
-
-  return tm.to_dict()
+  tasks = await tm.to_dict()
+  return tasks
 
 @router.post('/', response_model=TaskRead)
 async def post_task(req: Request, task: TaskModel):

@@ -14,8 +14,9 @@ class TaskService:
       raise KeyError(f"Task with id {id} wasn't found")
     return self.repository.complete(id)
 
-  def get_tasks(self):
-    return list(self.repository.get_all())
+  async def get_tasks(self):
+    tasks = await self.repository.get_all()
+    return list(tasks)
 
   def remove_task(self, id: int):
     if not self.repository.is_task_exists(id):
@@ -36,6 +37,7 @@ class TaskService:
       "status": task.status
     }
   
-  def to_dict(self):
-    return [self._task_to_dict(task) for task in self.get_tasks()]
+  async def to_dict(self):
+    tasks = await self.get_tasks()
+    return [self._task_to_dict(task) for task in tasks]
   
