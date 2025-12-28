@@ -15,13 +15,13 @@ class TaskService:
     Mark a task as completed by its unique identifier.
 
     Args:
-        id (int): Unique task ID.
+      id (int): Unique task ID.
 
     Returns:
-        Task: The task object.
+      Task: The task object.
 
     Raises:
-        TaskNotFoundError: If the task does not exist.
+      TaskNotFoundError: If the task does not exist.
     """
     task = await self.repository.complete(id)
 
@@ -40,24 +40,31 @@ class TaskService:
     return list(tasks)
 
   async def remove_task(self, id: int):
+    """
+    Delete a task by its unique id.
+
+    Args:
+      id (int): Unique task ID.
     
-    if not self.repository.is_task_exists(id):
-      raise KeyError(f"Task with id {id} wasn't found")
-    
-    return self.repository.delete(id)
+    Raises:
+      TaskNotFoundError: If the task does not exist.
+    """
+    response = await self.repository.delete(id)
+    if not response:
+      raise TaskNotFoundError(id)
 
   async def get_task(self, id: int) -> Task:
     """
-    Retrieve a task by its unique identifier.
+    Retrieve a task by its unique id.
 
     Args:
-        id (int): Unique task ID.
+      id (int): Unique task ID.
 
     Returns:
-        Task: The task object.
+      Task: The task object.
 
     Raises:
-        TaskNotFoundError: If the task does not exist.
+      TaskNotFoundError: If the task does not exist.
     """
 
     task = await self.repository.get_by_id(id)

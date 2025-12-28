@@ -48,12 +48,12 @@ async def get_task_by_id(req: Request, id: int):
     }  
     )
 async def delete_task_by_id(req: Request, id: int):
-  tm = req.app.state.tm
+  tm: TaskService = req.app.state.tm
 
   try:
-    tm.remove_task(id)
+    await tm.remove_task(id)
     
-  except KeyError:
+  except TaskNotFoundError:
     raise HTTPException(
       status_code = 404,
       detail = f"Task with id={id} not found"

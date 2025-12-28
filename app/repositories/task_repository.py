@@ -26,8 +26,10 @@ class TaskRepository:
 
     return self._record_to_task(task_record)
 
-  async def delete(self, id: int) -> Task:
-    return self._tasks.pop(id)
+  async def delete(self, id: int) -> bool:
+    record = await self._pool.fetchrow(DELETE_TASK, id)
+
+    return record["id"] == id
 
 
   async def complete(self, id: int) -> Task | None:
