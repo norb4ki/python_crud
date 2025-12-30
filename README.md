@@ -50,12 +50,12 @@ CREATE TABLE tasks (
 ```
 
 ### Install Dependencies
-`requirements.txt` is currently empty. Install the core dependencies:
+Install the core dependencies:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install fastapi uvicorn asyncpg python-dotenv
+pip install -r requirements.txt
 ```
 
 ### Run the API
@@ -75,3 +75,4 @@ API will be available at `http://127.0.0.1:8000`.
 ### Notes
 - DB connection settings are read from `.env`.
 - The DB host and port are fixed to `localhost:5432` in `app/main.py`.
+
